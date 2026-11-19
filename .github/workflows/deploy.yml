@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # 예약 공개용 — 매주 토요일 09:00 KST(= 토요일 00:00 UTC)에 다시 빌드·배포
+  # 예약 공개용 — 매주 일요일 09:00 KST(= 일요일 00:00 UTC)에 다시 빌드·배포
   schedule:
-    - cron: '0 0 * * 6'
+    - cron: '0 0 * * 0'
 
 permissions:
   contents: read

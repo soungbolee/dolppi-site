@@ -2,7 +2,7 @@
 title: "클로드(Claude)로 SAP 데이터 분석하기 — 연결부터 첫 질문까지"
 subtitle: "커넥터 하나로 S/4HANA에 말로 묻기까지, 직접 해 보며 알게 된 것"
 description: "클로드(Claude)에 SAP S/4HANA 데이터를 연결해 자연어로 분석하는 방법. 커넥터와 MCP 서버 구조, 연결 네 단계, 첫 질문 다섯 개, 잘 되는 질문과 안 되는 질문을 직접 해 보며 정리했습니다."
-date: 2026-11-21T09:00:00+09:00
+date: 2026-11-22T09:00:00+09:00
 category: ai-agent
 tags: ["클로드", "Claude", "SAP", "S/4HANA", "MCP", "AI 데이터 분석"]
 series: "클로드로 SAP 데이터 분석하기"
