@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { categoryName } from '../data/site';
+const items = (await getCollection('company')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="회사 연재 모음" description="ASPN Insight에 연재한 Data&AI 시리즈 요약과 원문 링크.">
+  <section class="wrap" style="padding-top:56px">
+    <h1 style="margin:0 0 8px;font-size:32px">회사 블로그 연재 모음</h1>
+    <p style="margin:0 0 28px;color:var(--muted)">ASPN Insight에 연재한 Data&amp;AI 시리즈를 요약했습니다. 원문은 회사 블로그에서 읽을 수 있습니다.</p>
+    <div class="grid-cards">
+      {items.map((c) => (
+        <a class="card" href={c.data.url} target="_blank" rel="noopener">
+          <span style="font-size:12.5px;font-weight:700;color:var(--accent)">{c.data.layer} · {categoryName(c.data.category)}</span>
+          <span class="card-title">{c.data.title}</span>
+          <span class="card-desc">{c.data.summary}</span>
+          <span style="font-size:13px;font-weight:700;color:var(--accent)">원문 보기 ↗</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>

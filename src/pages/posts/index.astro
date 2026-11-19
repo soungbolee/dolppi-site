@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostItem from '../../components/PostItem.astro';
+import { getPosts } from '../../lib/posts';
+import { CATEGORIES } from '../../data/site';
+const posts = await getPosts();
+---
+<Base title="전체 글" description="돌삐의 전체 글 목록 — Snowflake, 데이터 연결·통합, AI 에이전트, 지식그래프, 분석·BI, 거버넌스.">
+  <section class="wrap" style="padding-top:56px">
+    <h1 style="margin:0 0 16px;font-size:32px">전체 글</h1>
+    <nav aria-label="카테고리" class="cats">
+      {CATEGORIES.map((c) => <a class="tag" href={`/category/${c.slug}/`}>{c.name}</a>)}
+    </nav>
+    <div style="border-top:1px solid var(--line);margin-top:24px">
+      {posts.length ? posts.map((p) => <PostItem post={p} />) : <p style="padding:22px 0;color:var(--muted)">첫 글을 준비하고 있습니다.</p>}
+    </div>
+  </section>
+</Base>
+<style>.cats{display:flex;flex-wrap:wrap;gap:8px}</style>

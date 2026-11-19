@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostItem from '../../components/PostItem.astro';
+import { getPosts } from '../../lib/posts';
+import { CATEGORIES } from '../../data/site';
+
+export function getStaticPaths() {
+  return CATEGORIES.map((c) => ({ params: { slug: c.slug }, props: { cat: c } }));
+}
+const { cat } = Astro.props;
+const posts = (await getPosts()).filter((p) => p.data.category === cat.slug);
+---
+<Base title={cat.name} description={`${cat.name} — ${cat.desc}`}>
+  <section class="wrap" style="padding-top:56px">
+    <p style="margin:0 0 8px"><a href="/posts/" style="text-decoration:none;font-size:14px">← 전체 글</a></p>
+    <h1 style="margin:0 0 8px;font-size:32px">{cat.name}</h1>
+    <p style="margin:0;color:var(--muted)">{cat.desc}</p>
+    <div style="border-top:1px solid var(--line);margin-top:24px">
+      {posts.length ? posts.map((p) => <PostItem post={p} />) : <p style="padding:22px 0;color:var(--muted)">이 카테고리의 첫 글을 준비하고 있습니다.</p>}
+    </div>
+  </section>
+</Base>

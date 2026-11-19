@@ -1,0 +1,123 @@
+---
+import Base from '../layouts/Base.astro';
+import PostItem from '../components/PostItem.astro';
+import { getPosts } from '../lib/posts';
+import { getCollection } from 'astro:content';
+import { CATEGORIES } from '../data/site';
+
+const posts = (await getPosts()).slice(0, 5);
+const featured = [5, 8, 10]; // 첫 화면에 보여 줄 회사 연재 (order 번호)
+const company = (await getCollection('company')).filter((c) => featured.includes(c.data.order)).sort((a, b) => a.data.order - b.data.order);
+const layers = [
+  ['에이전트 접점', '클로드 · Joule · MCP'],
+  ['권한 · 통제', '권한 · 마스킹 · 감사'],
+  ['관계', '지식그래프 · 온톨로지'],
+  ['의미', '지표 · 시맨틱 · BI'],
+  ['데이터 통합', 'SAP · Snowflake · BDC'],
+];
+const portfolio = [
+  { t: 'S/4HANA 자연어 분석 에이전트', p: '경영 분석을 매번 보고서로 요청', a: 'MCP 서버 · 사용자 신원 전달 · CDS DCL', r: '', tags: ['Joule', 'MCP', 'BTP'] },
+  { t: '손익 데이터 지식그래프와 정합성 진단', p: '여러 단계를 건너는 원인 분석', a: 'CO-PA 지식그래프 · 규칙 기반 진단', r: '', tags: ['HANA Cloud', 'RDF', 'SPARQL'] },
+  { t: 'SAP–Snowflake 연동 실증 경험', p: 'SAP 데이터를 분석·AI 플랫폼으로', a: 'BDC 데이터 프로덕트 · Zero-Copy', r: '', tags: ['BDC', 'Snowflake', 'Datasphere'] },
+];
+---
+<Base>
+  <section class="wrap hero">
+    <div class="hero-text">
+      <p class="eyebrow">Data &amp; AI 컨설턴트의 기록</p>
+      <h1>데이터를 잇고, AI를 붙이고,<br class="br-wide" /> 현장에서 확인한 것만.</h1>
+      <p class="lead">SAP와 Snowflake로 데이터를 연결하고, 지식그래프로 관계를 잇고, 클로드·Joule 같은 AI 에이전트를 붙여 보며 직접 겪고 확인한 것을 기록합니다.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="/posts/">최근 글 보기</a>
+        <a class="btn btn-ghost" href="/about/">글쓴이 소개</a>
+      </div>
+    </div>
+    <div class="layers" aria-label="다섯 개의 층으로 보는 AI 데이터 플랫폼">
+      <p class="layers-title">다섯 개의 층으로 보는 AI 데이터 플랫폼</p>
+      {layers.map(([n, d], i) => (
+        <div class={`layer layer-${i}`}><span>{n}</span><span class="d">{d}</span></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap stack">
+      <div class="section-head"><h2>카테고리</h2></div>
+      <div class="grid-cards">
+        {CATEGORIES.map((c) => (
+          <a class="card" href={`/category/${c.slug}/`}>
+            <span class="card-title">{c.name}{'badge' in c && <span class="badge">{c.badge}</span>}</span>
+            <span class="card-desc">{c.desc}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap stack" style="padding-top:64px">
+    <div class="section-head"><h2>최근 글</h2><a href="/posts/" class="more">전체 글 보기 →</a></div>
+    <div class="list">
+      {posts.length ? posts.map((p) => <PostItem post={p} />) : <p class="empty">첫 글을 준비하고 있습니다.</p>}
+    </div>
+  </section>
+
+  {company.length > 0 && (
+    <section class="wrap stack" style="padding-top:56px">
+      <div class="section-head"><h2>회사 블로그 연재 모음</h2><a href="/company/" class="more">전체 보기 →</a></div>
+      <p class="note">ASPN Insight에 연재한 Data&amp;AI 시리즈를 요약했습니다. 원문은 회사 블로그에서 읽을 수 있습니다.</p>
+      <div class="grid-cards">
+        {company.map((c) => (
+          <a class="card" href={c.data.url} target="_blank" rel="noopener">
+            <span class="layer-tag">{c.data.layer}</span>
+            <span class="card-title">{c.data.title}</span>
+            <span class="card-desc">{c.data.summary}</span>
+            <span class="out">원문 보기 ↗</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section id="portfolio" class="wrap stack" style="padding-top:56px">
+    <div class="section-head"><h2>포트폴리오</h2></div>
+    <div class="grid-cards">
+      {portfolio.map((x) => (
+        <div class="pf">
+          <span class="card-title">{x.t}</span>
+          <span class="card-desc"><b>문제</b> {x.p}<br /><b>접근</b> {x.a}{x.r && <><br /><b>결과</b> {x.r}</>}</span>
+          <span class="tags">{x.tags.map((t) => <span class="chip">{t}</span>)}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-top: 88px; padding-bottom: 72px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
+  .hero-text { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+  @media (max-width: 600px) { .br-wide { display: none; } }
+  .eyebrow { margin: 0; font-size: 15px; font-weight: 700; color: var(--accent); }
+  h1 { margin: 0; font-size: clamp(32px, 5vw, 46px); line-height: 1.3; letter-spacing: -0.5px; }
+  .lead { margin: 0; font-size: 18px; line-height: 1.75; color: var(--muted); max-width: 600px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 6px; }
+  .layers { flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+  .layers-title { margin: 0 0 4px; font-size: 13px; font-weight: 700; color: var(--subtle); }
+  .layer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-radius: 10px; background: #EEF1F5; font-weight: 700; }
+  .layer .d { font-size: 13px; font-weight: 400; }
+  .layer-0 { background: var(--accent); color: #fff; }
+  .layer-1 { background: var(--accent-soft); color: var(--accent-dark); }
+  .band { background: var(--panel); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .band .stack { padding-top: 56px; padding-bottom: 56px; }
+  .stack { display: flex; flex-direction: column; gap: 20px; }
+  .badge { font-size: 12px; font-weight: 700; color: var(--accent); margin-left: 8px; }
+  .more { font-size: 14px; font-weight: 700; text-decoration: none; }
+  .list { border-top: 1px solid var(--line); }
+  .empty, .note { margin: 0; font-size: 14.5px; color: var(--muted); }
+  .empty { padding: 22px 0; }
+  .layer-tag { font-size: 12.5px; font-weight: 700; color: var(--accent); }
+  .out { font-size: 13px; font-weight: 700; color: var(--accent); }
+  .pf { display: flex; flex-direction: column; gap: 12px; padding: 24px; border-radius: 12px; background: var(--panel); }
+  .pf b { color: var(--ink); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: 12px; padding: 4px 10px; border-radius: 999px; background: #fff; border: 1px solid #D5DAE1; }
+</style>

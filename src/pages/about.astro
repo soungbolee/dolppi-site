@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site';
+const timeline = [
+  { y: '2001', t: 'SAP 컨설팅 시작 — SAP BW·DW 컨설턴트', d: '여러 산업의 BW·DW 구축 프로젝트 수행' },
+  { y: '2017 이후', t: '분석 컨설팅 사업부 리딩', d: '영업·프리세일즈·사업 운영을 맡으며 SAP 분석 제품군 전반을 다룸' },
+  { y: '지금', t: 'SAP BDC·Datasphere·SAC, Snowflake, 지식그래프, AI 에이전트', d: '클로드·Joule·MCP로 ERP 데이터에 AI를 붙이는 구성을 직접 만들고 검증' },
+];
+const skills = ['SAP BDC', 'Datasphere', 'SAP Analytics Cloud', 'SAP BW', 'S/4HANA 분석·CDS', 'Snowflake', '지식그래프·HANA Cloud', 'Joule', '클로드·MCP', 'SAP BTP'];
+---
+<Base title="소개" description="돌삐를 쓰는 사람 — SAP 데이터 & AI 컨설턴트 이성보.">
+  <section class="narrow intro">
+    <img src="/img/profile.jpg" alt="이성보 프로필 사진" width="168" height="168" class="photo" />
+    <div class="who">
+      <p class="eyebrow">글쓴이 소개</p>
+      <h1>이성보</h1>
+      <p class="lead">SAP 데이터 &amp; AI 컨설턴트. 데이터를 잇고 AI를 붙이는 일을 합니다.</p>
+    </div>
+  </section>
+
+  <section class="narrow block">
+    <h2>돌삐를 쓰는 이유</h2>
+    <p class="body">SAP BW로 데이터 일을 시작해 BDC와 Datasphere, Snowflake, 지식그래프, AI 에이전트까지 왔습니다. 도구는 계속 바뀌지만 "데이터를 어떻게 이어야 AI가 제대로 일하는가"라는 질문은 그대로입니다. 돌삐에는 그 질문을 붙잡고 직접 구성하고, 막히고, 해결하며 확인한 것만 적습니다.</p>
+  </section>
+
+  <section class="band">
+    <div class="narrow block">
+      <h2>걸어온 길</h2>
+      <ol class="timeline">
+        {timeline.map((x) => <li><span class="y">{x.y}</span><span class="t">{x.t}</span><span class="d">{x.d}</span></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="narrow block">
+    <h2>다루는 기술</h2>
+    <div class="skills">{skills.map((s) => <span>{s}</span>)}</div>
+  </section>
+
+  <section class="narrow block">
+    <h2>연락하기</h2>
+    <p class="body" style="font-size:15.5px">글에 대한 의견, 비슷한 고민을 나누고 싶은 분은 편하게 연락 주세요.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px">
+      {SITE.linkedin && <a class="btn btn-primary" href={SITE.linkedin} rel="me">LinkedIn</a>}
+      {SITE.email && <a class="btn btn-ghost" href={`mailto:${SITE.email}`}>이메일</a>}
+    </div>
+    <p class="fine">이 블로그의 글은 개인 의견이며 소속 회사의 공식 입장이 아닙니다. 고객사 정보와 내부 식별자는 싣지 않습니다.</p>
+  </section>
+</Base>
+<style>
+  .intro { padding-top: 72px; padding-bottom: 40px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
+  .photo { width: 168px; height: 168px; border-radius: 50%; object-fit: cover; flex: 0 0 168px; }
+  .who { flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+  .eyebrow { margin: 0; font-size: 14px; font-weight: 700; color: var(--accent); }
+  h1 { margin: 0; font-size: 40px; }
+  .lead { margin: 0; font-size: 18px; line-height: 1.7; color: #3B4556; }
+  .block { padding-top: 40px; padding-bottom: 8px; display: flex; flex-direction: column; gap: 16px; }
+  .block h2 { margin: 0; font-size: 22px; }
+  .body { margin: 0; font-size: 16.5px; line-height: 1.9; color: var(--text); }
+  .band { background: var(--panel); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: 40px; }
+  .band .block { padding-bottom: 48px; }
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 24px; border-left: 2px solid var(--accent); display: flex; flex-direction: column; gap: 26px; }
+  .timeline li { display: flex; flex-direction: column; gap: 4px; }
+  .y { font-size: 13.5px; font-weight: 700; color: var(--accent); }
+  .t { font-size: 17px; font-weight: 700; }
+  .d { font-size: 15px; line-height: 1.7; color: var(--muted); }
+  .skills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .skills span { font-size: 14px; padding: 8px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-dark); font-weight: 600; }
+  .fine { margin: 8px 0 0; font-size: 13.5px; line-height: 1.7; color: var(--subtle); }
+</style>

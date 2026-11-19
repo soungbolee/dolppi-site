@@ -1,0 +1,106 @@
+---
+import Base from '../../layouts/Base.astro';
+import Logo from '../../components/Logo.astro';
+import { render, getCollection } from 'astro:content';
+import { getPosts, fmtDate, readingMinutes, type Post } from '../../lib/posts';
+import { categoryName } from '../../data/site';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, all: posts } }));
+}
+const { post, all } = Astro.props as { post: Post; all: Post[] };
+const { Content, headings } = await render(post);
+const d = post.data;
+const toc = headings.filter((h) => h.depth === 2);
+const series = d.series
+  ? all.filter((p) => p.data.series === d.series).sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0))
+  : [];
+const related = (await getCollection('company')).filter((c) => c.data.category === d.category).slice(0, 3);
+---
+<Base title={d.title} description={d.description} ogImage={d.cover} article={{ published: d.date, modified: d.updated }}>
+  <div class="wrap layout">
+    <article class="article">
+      <nav aria-label="위치" class="crumb"><a href="/posts/">블로그</a> › <a href={`/category/${d.category}/`}>{categoryName(d.category)}</a></nav>
+      {d.series && <span class="pill">시리즈 · {d.series}{d.seriesOrder ? ` ${d.seriesOrder}편` : ''}</span>}
+      <h1>{d.title}</h1>
+      {d.subtitle && <p class="subtitle">{d.subtitle}</p>}
+      <div class="meta">
+        <span>돌삐</span>
+        <time datetime={d.date.toISOString()}>{fmtDate(d.date)}</time>
+        {d.updated && <span>수정 {fmtDate(d.updated)}</span>}
+        <span>약 {readingMinutes(post.body)}분</span>
+      </div>
+
+      <div class="prose"><Content /></div>
+
+      {d.tags.length > 0 && <div class="tags">{d.tags.map((t) => <span class="tag">#{t}</span>)}</div>}
+
+      {series.length > 1 && (
+        <section class="box">
+          <p class="box-title">시리즈 · {d.series}</p>
+          {series.map((s) =>
+            s.id === post.id
+              ? <span class="cur">{s.data.seriesOrder}편 · {s.data.title} (지금 읽는 글)</span>
+              : <a href={`/posts/${s.id}/`}>{s.data.seriesOrder}편 · {s.data.title}</a>
+          )}
+        </section>
+      )}
+
+      <section class="author">
+        <Logo dark height={44} />
+        <div class="author-text">
+          <span class="author-name">돌삐 · 데이터와 AI, 현장의 기록</span>
+          <span>데이터를 잇고 AI를 붙이며 직접 확인한 것을 기록합니다. 개인 의견이며 소속 회사의 공식 입장이 아닙니다.</span>
+        </div>
+        <a class="author-btn" href="/about/">글쓴이 소개</a>
+      </section>
+
+      {related.length > 0 && (
+        <section class="related">
+          <p class="box-title" style="font-size:18px">함께 읽으면 좋은 글</p>
+          {related.map((r) => (
+            <a href={r.data.url} target="_blank" rel="noopener"><span class="rl">회사 연재 · 원문 ↗</span><span class="rt">{r.data.title}</span></a>
+          ))}
+        </section>
+      )}
+    </article>
+
+    {toc.length > 0 && (
+      <aside class="toc" aria-label="이 글의 목차">
+        <p>목차</p>
+        {toc.map((h) => <a href={`#${h.slug}`}>{h.text}</a>)}
+      </aside>
+    )}
+  </div>
+</Base>
+
+<style>
+  .layout { padding-top: 48px; display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start; }
+  .article { flex: 999 1 640px; min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 20px; }
+  .crumb { font-size: 13.5px; color: var(--subtle); }
+  .crumb a { text-decoration: none; }
+  .pill { align-self: flex-start; }
+  h1 { margin: 0; font-size: clamp(28px, 4vw, 36px); line-height: 1.4; letter-spacing: -0.3px; }
+  .subtitle { margin: 0; font-size: 17.5px; line-height: 1.7; color: var(--muted); }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13.5px; color: var(--subtle); padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .box { display: flex; flex-direction: column; gap: 12px; padding: 24px; border-radius: 12px; border: 1px solid var(--line); }
+  .box a { text-decoration: none; color: var(--muted); }
+  .box-title { margin: 0; font-size: 14px; font-weight: 700; }
+  .cur { font-weight: 700; color: var(--accent); }
+  .author { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; padding: 22px 24px; border-radius: 12px; background: var(--night); color: #C3CAD5; font-size: 14px; line-height: 1.7; }
+  .author-text { flex: 999 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .author-name { font-weight: 700; font-size: 16px; color: #fff; }
+  .author-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1.5px solid #8FD3CC; color: #8FD3CC; font-weight: 700; text-decoration: none; }
+  .related { display: flex; flex-direction: column; }
+  .related a { display: flex; flex-direction: column; gap: 4px; padding: 16px 0; border-top: 1px solid var(--line); text-decoration: none; color: var(--ink); }
+  .related a:last-child { border-bottom: 1px solid var(--line); }
+  .rl { font-size: 12.5px; font-weight: 700; color: var(--accent); }
+  .rt { font-size: 16px; font-weight: 700; }
+  .toc { flex: 1 1 240px; min-width: 0; position: sticky; top: 24px; display: flex; flex-direction: column; gap: 12px; padding: 20px; border-radius: 12px; background: var(--panel); }
+  .toc p { margin: 0; font-size: 13.5px; font-weight: 700; color: var(--subtle); }
+  .toc a { font-size: 14px; line-height: 1.6; text-decoration: none; color: #3B4556; }
+  .toc a:hover { color: var(--accent); }
+  @media (max-width: 1000px) { .toc { position: static; } }
+</style>

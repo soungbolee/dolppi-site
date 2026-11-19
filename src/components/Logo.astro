@@ -1,0 +1,12 @@
+---
+// 로고 E — 연한 돌(데이터)과 짙은 돌(AI)
+interface Props { dark?: boolean; height?: number }
+const { dark = false, height = 38 } = Astro.props;
+const w = Math.round((height * 120) / 80);
+const back = dark ? '#8FD3CC' : '#0E6B66';
+const front = dark ? '#E3F1EF' : '#B9DCD8';
+---
+<svg width={w} height={height} viewBox="0 0 120 80" aria-hidden="true">
+  <path d="M88 22 C104 22 114 34 113 50 C112 66 100 74 86 74 C72 74 63 63 64 48 C65 33 74 22 88 22 Z" fill={back} />
+  <path d="M42 8 C62 8 74 28 72 48 C70 68 56 78 40 78 C22 78 10 64 12 44 C14 24 24 8 42 8 Z" fill={front} />
+</svg>
