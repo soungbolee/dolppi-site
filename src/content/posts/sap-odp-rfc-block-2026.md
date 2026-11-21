@@ -31,9 +31,9 @@ draft: false
 
 ## 왜 하필 ODP-RFC만 막히나
 
-1. **원래 내부용이었습니다.** SAP는 Note 3255746에서 "ODP-RFC는 SAP 애플리케이션 사이의 데이터 전송 전용이며, 고객·3자 애플리케이션의 사용은 금지"라고 못 박았습니다. 온프레미스·Private Cloud의 ECC, S/4HANA, BW가 사실상 모두 해당됩니다.
+1. **원래 내부용이었습니다.** SAP는 Note 3255746(v12)에서 "ODP-RFC는 SAP 애플리케이션 사이의 데이터 전송 전용이며, 고객·3자 애플리케이션의 사용은 금지"라고 못 박았습니다. 온프레미스·Private Cloud의 ECC, S/4HANA, BW가 사실상 모두 해당됩니다.
 2. **보안 패치로 실제로 막힙니다.** 2026년 6월 Patch Day에 나온 보안 노트 3748819를 넣으면, 허용된 구독자 유형이 아닌 호출은 거부됩니다. 미리 내 시스템을 점검하는 도구(Note 3439624)도 나와 있습니다.
-3. **임시 허용은 연말까지입니다.** 패치 후 갑자기 멈추는 것을 막으려고 SAP가 한시 예외(Note 3731818, 리포트 `RODPS_REPL_SECUREACCESS_OPTOUT`)를 줬지만, **2026년 말에 만료**됩니다. 그 뒤에는 예외 없이 적용하는 노트가 나온다고 예고되어 있습니다.
+3. **임시 허용은 연말까지입니다.** 패치 후 갑자기 멈추는 것을 막으려고 SAP가 한시 예외(Note 3731818 v4, 리포트 `RODPS_REPL_SECUREACCESS_OPTOUT`)를 줬지만, **2026년 말에 만료**됩니다. 그 뒤에는 예외 없이 적용하는 노트가 나온다고 예고되어 있습니다.
 
 이 예외는 시간을 버는 수단이지, ODP-RFC를 써도 된다는 허락이 아닙니다. 지금 ODP-RFC로 데이터를 받고 있다면 **2027년부터 쓸 길을 이번 달에 정해야** 합니다.
 
@@ -42,7 +42,7 @@ draft: false
 | 방법 | 쉽게 말하면 | 유의점 |
 |---|---|---|
 | DB 직접 복제 | 창고 바닥을 통째로 복사 | 런타임 DB 라이선스라면 계약상 제한 |
-| 테이블 직접 읽기 (RFC_READ_TABLE 등) | 선반을 직접 뒤짐 | SAP가 3자 사용 미지원·보안 위험을 명시 (KBA 3089374) |
+| 테이블 직접 읽기 (RFC_READ_TABLE 등) | 선반을 직접 뒤짐 | SAP가 3자 사용 미지원·보안 위험을 명시 (KBA 3089374 v8) |
 | BAPI·IDoc | 건별 전표 연동 | 거래 연계용, 대량 추출에는 맞지 않음 |
 | 엑셀 다운로드 | 화면에서 내려받기 | 소량·수작업용 |
 
@@ -86,7 +86,7 @@ SAP ERP를 **창고**, 분석 플랫폼을 **사무실**로 보면 이렇습니�
 
 ## AI를 붙일 때 — API Policy가 진짜 쟁점
 
-ODP-RFC는 "데이터를 어떻게 꺼내느냐"의 문제입니다. AI까지 생각하면 더 큰 쟁점이 하나 있습니다. SAP가 2026년 4월 개정한 **API Policy**의 2.2.2항입니다.
+ODP-RFC는 "데이터를 어떻게 꺼내느냐"의 문제입니다. AI까지 생각하면 더 큰 쟁점이 하나 있습니다. SAP가 2026년 4월 개정한 **API Policy**(v.4.2026a)의 2.2.2항입니다.
 
 > SAP가 명시적으로 승인한 아키텍처·데이터 서비스·경로를 통하지 않으면, (a) API 호출을 스스로 계획·선택·실행하는 (반)자율·생성형 AI 시스템과의 연동, (b) 스크래핑이나 체계적·대규모 추출·복제를 위한 API 사용을 금지한다. (요약 번역)
 
@@ -116,8 +116,12 @@ AI 에이전트가 SAP API를 직접 이리저리 부르는 구성은 이 조항
 
 **참고**
 
-- SAP, [SAP API Policy (latest)](https://help.sap.com/doc/sap-api-policy/latest/en-US/API_Policy_latest.pdf) (v.4.2026a, 2026-11-21 확인)
-- SAP Note 3255746 v12 (2026-06-09) · 3731818 v4 (2026-07-27) · 3748819 · 3439624, KBA 3089374 v8 (2025-07-09) — SAP for Me에서 확인 (로그인 필요)
+- SAP, [SAP API Policy (latest)](https://help.sap.com/doc/sap-api-policy/latest/en-US/API_Policy_latest.pdf) (v.4.2026a, 2026-04-25)
+- SAP Note 3255746 v12 — Unpermitted usage of ODP Data Replication APIs (2026-06-09)
+- SAP Note 3731818 v4 — Temporary suspension for automated assessment of subscriber types (2026-07-27)
+- SAP KBA 3089374 v8 — /SAPDS/RFC_READ_TABLE2 not working as expected when used by third party (2025-07-09)
+- 관련 노트 3748819(차단)·3439624(점검)는 Note 3255746 v12에서 참조
+- SAP Note·KBA 원문은 SAP for Me에서 확인 (로그인 필요)
 - ASUG, [SAP API Policy Overview: API Availability, Agentic AI Architectures, and Impacts on Existing Integrations](https://www.asug.com/insights/sap-api-policy-overview-api-availability-agentic-ai-architectures-and-impacts-on-existing-integrations) (2026-07-05)
 - SAPinsider, [SAP Note 3255746: The June 2026 ODP-RFC Deadline Explained](https://sapinsider.org/blogs/sap-note-3255746-odp-rfc-deadline-2026/) (2026-07-02)
 - Google Cloud, [SAP and Google Cloud launch BDC Connect for BigQuery](https://cloud.google.com/blog/products/sap-google-cloud/sap-and-google-cloud-launch-bdc-connect-for-bigquery/) (2026-07-27)
