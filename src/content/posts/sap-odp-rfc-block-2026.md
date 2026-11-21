@@ -10,7 +10,9 @@ draft: false
 ---
 "90일 넘은 매출채권이 많은 거래처가 어디지?" 이런 질문을 AI에게 하든, 대시보드로 보든 먼저 해야 할 일이 있습니다. SAP 안에 있는 데이터를 분석·AI 플랫폼으로 **옮기는 것**입니다.
 
-그런데 그 옮기는 길 가운데 많은 회사가 써 온 길 하나가 올해 말 닫힙니다. 최근 제조·화학·식품 유통 쪽 몇 곳의 SAP 데이터를 AI와 분석에 쓰는 방안을 정리하면서, 같은 질문을 여러 번 받았습니다. "우리 추출 도구도 막히나요?" "그럼 어디로 가야 하나요?" 이 글은 그 답을 비전문가도 읽을 수 있게 정리한 것입니다. **2026년 11월 기준**입니다.
+그런데 그 옮기는 길 가운데 많은 회사가 써 온 길 하나가 올해 말 닫힙니다. 최근 제조·화학·식품 유통 쪽 몇 곳의 SAP 데이터를 AI와 분석에 쓰는 방안을 정리하면서, 같은 질문을 여러 번 받았습니다. "우리 추출 도구도 막히나요?" "그럼 어디로 가야 하나요?" 이 글은 그 답을 비전문가도 읽을 수 있게 정리한 것입니다.
+
+> **2026년 11월 21일 현재 기준**의 정보입니다. 인용한 문서의 버전은 SAP API Policy v.4.2026a, SAP Note 3255746 v12·3731818 v4, KBA 3089374 v8입니다. 이후 문서가 개정되거나 일정이 바뀌면 내용이 달라질 수 있으니, 적용 전에는 최신 버전을 확인하세요.
 
 ## 한 줄 요약
 
@@ -64,7 +66,7 @@ SAP ERP를 **창고**, 분석 플랫폼을 **사무실**로 보면 이렇습니�
 
 | 플랫폼 | 공유 — BDC Connect (데이터 복사 없음) | 플랫폼이 당겨가기 | SAP가 밀어주기 |
 |---|---|---|---|
-| Microsoft Fabric | 2025년 11월 발표, 2026년 3분기 정식 제공 예정이라 했음 (정식 제공 공지는 아직 확인 못 함) | Datasphere 경유 미러링 | ABAP SDK for Azure |
+| Microsoft Fabric | 발표됨, 정식 제공 공지 대기 (2025-11 발표 당시 2026년 3분기 예정) | Datasphere 경유 미러링 | ABAP SDK for Azure |
 | Snowflake | 정식 제공 | 3자 도구 활용 | — |
 | Databricks | 정식 제공 (SAP Databricks는 BDC에 내장) | 3자 도구 활용 | — |
 | Google BigQuery | 정식 제공 (2026-07) | BigQuery Connector for SAP (SLT 기반) | ABAP SDK for Google Cloud |
@@ -114,8 +116,8 @@ AI 에이전트가 SAP API를 직접 이리저리 부르는 구성은 이 조항
 
 **참고**
 
-- SAP, [SAP API Policy (latest)](https://help.sap.com/doc/sap-api-policy/latest/en-US/API_Policy_latest.pdf) (v.4.2026a, 2026-11 확인)
-- SAP Note 3255746 · 3748819 · 3731818 · 3439624, KBA 3089374 — SAP for Me에서 확인 (로그인 필요)
+- SAP, [SAP API Policy (latest)](https://help.sap.com/doc/sap-api-policy/latest/en-US/API_Policy_latest.pdf) (v.4.2026a, 2026-11-21 확인)
+- SAP Note 3255746 v12 (2026-06-09) · 3731818 v4 (2026-07-27) · 3748819 · 3439624, KBA 3089374 v8 (2025-07-09) — SAP for Me에서 확인 (로그인 필요)
 - ASUG, [SAP API Policy Overview: API Availability, Agentic AI Architectures, and Impacts on Existing Integrations](https://www.asug.com/insights/sap-api-policy-overview-api-availability-agentic-ai-architectures-and-impacts-on-existing-integrations) (2026-07-05)
 - SAPinsider, [SAP Note 3255746: The June 2026 ODP-RFC Deadline Explained](https://sapinsider.org/blogs/sap-note-3255746-odp-rfc-deadline-2026/) (2026-07-02)
 - Google Cloud, [SAP and Google Cloud launch BDC Connect for BigQuery](https://cloud.google.com/blog/products/sap-google-cloud/sap-and-google-cloud-launch-bdc-connect-for-bigquery/) (2026-07-27)
