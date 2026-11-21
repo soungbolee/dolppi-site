@@ -12,7 +12,7 @@ draft: false
 
 그런데 그 옮기는 길 가운데 많은 회사가 써 온 길 하나가 올해 말 닫힙니다. 최근 제조·화학·식품 유통 쪽 몇 곳의 SAP 데이터를 AI와 분석에 쓰는 방안을 정리하면서, 같은 질문을 여러 번 받았습니다. "우리 추출 도구도 막히나요?" "그럼 어디로 가야 하나요?" 이 글은 그 답을 비전문가도 읽을 수 있게 정리한 것입니다.
 
-> **2026년 11월 21일 현재 기준**의 정보입니다. 인용한 문서의 버전은 SAP API Policy v.4.2026a, SAP Note 3255746 v12·3731818 v4, KBA 3089374 v8입니다. 이후 문서가 개정되거나 일정이 바뀌면 내용이 달라질 수 있으니, 적용 전에는 최신 버전을 확인하세요.
+> **2026년 11월 21일 현재 기준**의 정보입니다. 인용한 문서의 버전은 SAP API Policy v.4.2026a, SAP Note 3255746 v12·3748819 v7·3439624 v39·3731818 v4, KBA 3089374 v8입니다. 이후 문서가 개정되거나 일정이 바뀌면 내용이 달라질 수 있으니, 적용 전에는 최신 버전을 확인하세요.
 
 ## 한 줄 요약
 
@@ -32,7 +32,8 @@ draft: false
 ## 왜 하필 ODP-RFC만 막히나
 
 1. **원래 내부용이었습니다.** SAP는 Note 3255746(v12)에서 "ODP-RFC는 SAP 애플리케이션 사이의 데이터 전송 전용이며, 고객·3자 애플리케이션의 사용은 금지"라고 못 박았습니다. 온프레미스·Private Cloud의 ECC, S/4HANA, BW가 사실상 모두 해당됩니다.
-2. **보안 패치로 실제로 막힙니다.** 2026년 6월 Patch Day에 나온 보안 노트 3748819를 넣으면, 허용된 구독자 유형이 아닌 호출은 거부됩니다. 미리 내 시스템을 점검하는 도구(Note 3439624)도 나와 있습니다.
+2. **보안 취약점으로 등록돼 실제로 막힙니다.** 호출한 쪽이 누구인지 확인하지 않는 문제가 CVE-2026-44754(CVSS 6.6)로 등록됐고, 2026년 6월 9일 보안 노트 3748819(v7)가 나왔습니다. 이 노트(수정은 Note 3635619 또는 해당 서포트 패키지)를 넣으면 ODP-RFC 호출마다 허용된 구독자 유형의 패턴인지 검사해, 아닌 호출은 거부합니다.
+   미리 내 시스템을 점검하는 도구도 있습니다. Note 3439624(v39)를 넣고 리포트 `RODPS_REPL_SUBSCRIBER_ASSESS`를 돌리면 호출이 '허용·비허용·불명확'으로 나뉘어 보입니다. 단, **넣은 뒤 들어오는 호출만** 평가하고, ODP-RFC는 클라이언트별이라 **관련 클라이언트마다** 돌려야 합니다. SAP Data Services나 HANA SDI에서 온 호출은 '불명확'으로 표시되는데, 차단 대상은 아니지만 실제로 그 시나리오에서 온 것인지 직접 확인하라고 안내합니다.
 3. **임시 허용은 연말까지입니다.** 패치 후 갑자기 멈추는 것을 막으려고 SAP가 한시 예외(Note 3731818 v4, 리포트 `RODPS_REPL_SECUREACCESS_OPTOUT`)를 줬지만, **2026년 말에 만료**됩니다. 그 뒤에는 예외 없이 적용하는 노트가 나온다고 예고되어 있습니다.
 
 이 예외는 시간을 버는 수단이지, ODP-RFC를 써도 된다는 허락이 아닙니다. 지금 ODP-RFC로 데이터를 받고 있다면 **2027년부터 쓸 길을 이번 달에 정해야** 합니다.
@@ -105,7 +106,7 @@ AI 에이전트가 SAP API를 직접 이리저리 부르는 구성은 이 조항
 ## 이번 달에 할 일 체크리스트
 
 - [ ] 우리 회사 추출 도구·커넥터가 ODP-RFC를 쓰는지 공급사에 확인했는가
-- [ ] Note 3439624 점검 도구로 실제 ODP-RFC 호출을 찾아봤는가
+- [ ] Note 3439624를 넣고, 관련 클라이언트마다 `RODPS_REPL_SUBSCRIBER_ASSESS`로 '비허용' 호출을 찾아봤는가 (넣은 뒤 며칠은 쌓여야 보임)
 - [ ] 보안 노트 3748819를 넣었는지, 임시 예외 리포트를 돌렸는지 확인했는가
 - [ ] 2027년 1월부터 쓸 대안 경로(BDC·ODP OData·자체 개발 등)를 정했는가
 - [ ] AI 연동 구성이 API Policy 2.2.2에 걸리지 않는지 SAP 담당자에게 서면으로 물었는가
@@ -120,7 +121,8 @@ AI 에이전트가 SAP API를 직접 이리저리 부르는 구성은 이 조항
 - SAP Note 3255746 v12 — Unpermitted usage of ODP Data Replication APIs (2026-06-09)
 - SAP Note 3731818 v4 — Temporary suspension for automated assessment of subscriber types (2026-07-27)
 - SAP KBA 3089374 v8 — /SAPDS/RFC_READ_TABLE2 not working as expected when used by third party (2025-07-09)
-- 관련 노트 3748819(차단)·3439624(점검)는 Note 3255746 v12에서 참조
+- SAP Security Note 3748819 v7 — [CVE-2026-44754] Missing caller identification check-in for ODP Data Replication APIs (2026-06-09)
+- SAP Note 3439624 v39 — Self-Assessment for data access to ODP Data Replication APIs (2026-11-05)
 - SAP Note·KBA 원문은 SAP for Me에서 확인 (로그인 필요)
 - ASUG, [SAP API Policy Overview: API Availability, Agentic AI Architectures, and Impacts on Existing Integrations](https://www.asug.com/insights/sap-api-policy-overview-api-availability-agentic-ai-architectures-and-impacts-on-existing-integrations) (2026-07-05)
 - SAPinsider, [SAP Note 3255746: The June 2026 ODP-RFC Deadline Explained](https://sapinsider.org/blogs/sap-note-3255746-odp-rfc-deadline-2026/) (2026-07-02)
