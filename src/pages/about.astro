@@ -38,12 +38,17 @@ const skills = ['SAP BDC', 'Datasphere', 'SAP Analytics Cloud', 'SAP BW', 'S/4HA
   </section>
 
   <section class="narrow block">
-    <h2>연락하기</h2>
-    <p class="body" style="font-size:15.5px">글에 대한 의견, 비슷한 고민을 나누고 싶은 분은 편하게 연락 주세요.</p>
-    <div style="display:flex;flex-wrap:wrap;gap:12px">
-      {SITE.linkedin && <a class="btn btn-primary" href={SITE.linkedin} rel="me">LinkedIn</a>}
-      {SITE.email && <a class="btn btn-ghost" href={`mailto:${SITE.email}`}>이메일</a>}
-    </div>
+    {/* 연락처(src/data/site.ts의 linkedin·email)가 하나라도 있을 때만 '연락하기'를 보여 줍니다 */}
+    {(SITE.linkedin || SITE.email) && (
+      <>
+        <h2>연락하기</h2>
+        <p class="body" style="font-size:15.5px">글에 대한 의견, 비슷한 고민을 나누고 싶은 분은 편하게 연락 주세요.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px">
+          {SITE.linkedin && <a class="btn btn-primary" href={SITE.linkedin} rel="me">LinkedIn</a>}
+          {SITE.email && <a class="btn btn-ghost" href={`mailto:${SITE.email}`}>이메일</a>}
+        </div>
+      </>
+    )}
     <p class="fine">이 블로그의 글은 개인 의견이며 소속 회사의 공식 입장이 아닙니다. 고객사 정보와 내부 식별자는 싣지 않습니다.</p>
   </section>
 </Base>
