@@ -8,7 +8,7 @@ tags: ["클로드", "Claude", "SAP", "S/4HANA", "MCP", "AI 데이터 분석"]
 series: "클로드로 SAP 데이터 분석하기"
 seriesOrder: 1
 cover: /img/d01-1_claude_sap_architecture.png
-draft: false
+draft: true
 ---
 "90일 넘은 매출채권이 많은 거래처가 어디지?" SAP를 쓰는 회사에서 이런 질문이 생기면 보통 보고서를 찾거나, 담당자에게 추출을 부탁하거나, 엑셀을 엽니다. 답은 ERP 안에 다 있는데 꺼내는 데 시간이 걸립니다.
 
