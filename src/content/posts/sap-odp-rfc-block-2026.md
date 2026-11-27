@@ -6,6 +6,7 @@ date: 2026-11-22T09:00:00+09:00
 category: data-integration
 tags: ["SAP", "ODP", "ODP-RFC", "SAP Note 3255746", "SAP API Policy", "BDC", "데이터 추출", "AI 데이터 분석"]
 cover: /img/o01-1_sap_data_four_paths.png
+updated: 2026-11-27T18:00:00+09:00
 draft: false
 ---
 "90일 넘은 매출채권이 많은 거래처가 어디지?" 이런 질문을 AI에게 하든, 대시보드로 보든 먼저 해야 할 일이 있습니다. SAP 안에 있는 데이터를 분석·AI 플랫폼으로 **옮기는 것**입니다.
@@ -67,7 +68,7 @@ SAP ERP를 **창고**, 분석 플랫폼을 **사무실**로 보면 이렇습니�
 
 | 플랫폼 | 공유 — BDC Connect (데이터 복사 없음) | 플랫폼이 당겨가기 | SAP가 밀어주기 |
 |---|---|---|---|
-| Microsoft Fabric | 발표됨, 정식 제공 공지 대기 (2025-11 발표 당시 2026년 3분기 예정) | Datasphere 경유 미러링 | ABAP SDK for Azure |
+| Microsoft Fabric | 정식 제공 지연 — 2027년 1분기 말로 미뤄졌다는 SAP 답변 있음 (2025-11 발표 당시 2026년 3분기 예정) | Datasphere 경유 미러링 | ABAP SDK for Azure |
 | Snowflake | 정식 제공 | 3자 도구 활용 | — |
 | Databricks | 정식 제공 (SAP Databricks는 BDC에 내장) | 3자 도구 활용 | — |
 | Google BigQuery | 정식 제공 (2026-07) | BigQuery Connector for SAP (SLT 기반) | ABAP SDK for Google Cloud |
@@ -111,7 +112,7 @@ AI 에이전트가 SAP API를 직접 이리저리 부르는 구성은 이 조항
 - [ ] 2027년 1월부터 쓸 대안 경로(BDC·ODP OData·자체 개발 등)를 정했는가
 - [ ] AI 연동 구성이 API Policy 2.2.2에 걸리지 않는지 SAP 담당자에게 서면으로 물었는가
 
-이 블로그에서는 다음 주부터 **클로드로 SAP 데이터를 분석하는 연재**를 시작합니다. 테스트 환경에서 직접 붙여 본 기록이고, 운영 환경에 적용할 때는 이 글의 API Policy 이야기를 함께 고려해야 합니다.
+다음 글에서는 정문(BDC)으로 들어온 데이터를 **다시 밖의 분석·AI 플랫폼으로 보낼 때** 무엇을 봐야 하는지 다룹니다. 그 뒤로는 **클로드로 SAP 데이터를 분석하는 연재**를 이어 갈 예정입니다. 테스트 환경에서 직접 붙여 본 기록이고, 운영 환경에 적용할 때는 이 글의 API Policy 이야기를 함께 고려해야 합니다.
 
 ---
 
