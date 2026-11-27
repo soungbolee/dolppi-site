@@ -5,7 +5,7 @@ description: "SAP BDC에 모은 데이터를 Snowflake·Databricks·BigQuery·Fa
 date: 2026-11-29T09:00:00+09:00
 category: data-integration
 tags: ["SAP", "BDC", "BDC Connect", "Datasphere", "데이터 연계", "SAP 약관", "개인정보 국외이전", "Microsoft Fabric"]
-draft: true
+draft: false
 ---
 [지난 글](/posts/sap-odp-rfc-block-2026/)에서 SAP 데이터를 꺼내던 뒷문(ODP-RFC)이 연말에 닫히고, SAP가 권하는 정문은 **BDC(Business Data Cloud)** 라고 적었습니다. 그 글을 보고 가장 많이 받은 질문이 이것입니다.
 
